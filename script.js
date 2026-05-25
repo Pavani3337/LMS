@@ -1,11 +1,11 @@
 // ================= LOGIN =================
 function login() {
-  const id = adminId.value;
-  const pass = adminPass.value;
+  const id = document.getElementById("adminId").value;
+  const pass = document.getElementById("adminPass").value;
 
   if (id === "admin" && pass === "1234") {
     localStorage.setItem("login", "true");
-    loginSuccess();
+    showApp();
   } else {
     alert("Invalid Login");
   }
@@ -16,14 +16,15 @@ function logout() {
   location.reload();
 }
 
-function loginSuccess() {
-  loginPage.style.display = "none";
-  app.classList.remove("hidden");
+function showApp() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("app").classList.remove("hidden");
   loadAll();
 }
 
+// auto login
 if (localStorage.getItem("login") === "true") {
-  loginSuccess();
+  showApp();
 }
 
 // ================= DATA =================
@@ -31,63 +32,66 @@ let students = JSON.parse(localStorage.getItem("students")) || [];
 let books = JSON.parse(localStorage.getItem("books")) || [];
 let issued = JSON.parse(localStorage.getItem("issued")) || [];
 
-// ================= TABS =================
+// ================= TAB =================
 function showTab(tab) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+  let sections = document.querySelectorAll(".tab");
+  sections.forEach(s => s.classList.add("hidden"));
   document.getElementById(tab).classList.remove("hidden");
 }
 
 // ================= STUDENTS =================
 function addStudent() {
-  students.push({
-    name: sName.value,
-    roll: sRoll.value
-  });
+  let name = document.getElementById("sName").value;
+  let roll = document.getElementById("sRoll").value;
 
-  localStorage.setItem("students", JSON.stringify(students));
-  renderStudents();
-  loadDropdowns();
-}
+  if (!name || !roll) {
+    alert("Enter student details");
+    return;
+  }
 
-function deleteStudent(i) {
-  students.splice(i, 1);
+  students.push({ name, roll });
   localStorage.setItem("students", JSON.stringify(students));
+
+  document.getElementById("sName").value = "";
+  document.getElementById("sRoll").value = "";
+
   renderStudents();
   loadDropdowns();
 }
 
 function renderStudents() {
-  let search = searchStudent.value.toLowerCase();
+  let search = document.getElementById("searchStudent").value.toLowerCase();
   let html = "";
 
   students
     .filter(s => s.roll.toLowerCase().includes(search))
     .forEach((s, i) => {
       html += `
-      <div class="card">
-        ${s.name} - ${s.roll}
-        <button onclick="deleteStudent(${i})">Delete</button>
-      </div>`;
+        <div class="card">
+          ${s.name} - ${s.roll}
+        </div>
+      `;
     });
 
-  studentList.innerHTML = html;
+  document.getElementById("studentList").innerHTML = html;
 }
 
 // ================= BOOKS =================
 function addBook() {
-  books.push({
-    name: bName.value,
-    author: bAuthor.value
-  });
+  let name = document.getElementById("bName").value;
+  let author = document.getElementById("bAuthor").value;
 
-  localStorage.setItem("books", JSON.stringify(books));
-  renderBooks();
-  loadDropdowns();
-}
+  if (!name || !author) {
+    alert("Enter book details");
+    return;
+  }
 
-function deleteBook(i) {
-  books.splice(i, 1);
+  books.push({ name, author });
   localStorage.setItem("books", JSON.stringify(books));
+
+  document.getElementById("bName").value = "";
+  document.getElementById("bAuthor").value = "";
+
   renderBooks();
   loadDropdowns();
 }
@@ -95,32 +99,37 @@ function deleteBook(i) {
 function renderBooks() {
   let html = "";
 
-  books.forEach((b, i) => {
+  books.forEach(b => {
     html += `
-    <div class="card">
-      ${b.name} - ${b.author}
-      <button onclick="deleteBook(${i})">Delete</button>
-    </div>`;
+      <div class="card">
+        ${b.name} - ${b.author}
+      </div>
+    `;
   });
 
-  bookList.innerHTML = html;
+  document.getElementById("bookList").innerHTML = html;
 }
 
-// ================= ISSUE =================
+// ================= ISSUE BOOK =================
 function issueBook() {
-  issued.push({
-    student: selectStudent.value,
-    book: selectBook.value,
-    date: issueDate.value,
-    returned: false
-  });
+  let student = document.getElementById("selectStudent").value;
+  let book = document.getElementById("selectBook").value;
+  let date = document.getElementById("issueDate").value;
 
+  if (!student || !book || !date) {
+    alert("Fill all fields");
+    return;
+  }
+
+  issued.push({ student, book, date, returned: false });
   localStorage.setItem("issued", JSON.stringify(issued));
+
   renderIssued();
 }
 
-function returnBook(i) {
-  issued[i].returned = true;
+// return book
+function returnBook(index) {
+  issued[index].returned = true;
   localStorage.setItem("issued", JSON.stringify(issued));
   renderIssued();
 }
@@ -130,30 +139,31 @@ function renderIssued() {
 
   issued.forEach((i, index) => {
     html += `
-    <div class="card">
-      ${i.student} → ${i.book} (${i.date})
-      <b>${i.returned ? "Returned" : "Not Returned"}</b>
+      <div class="card">
+        ${i.student} → ${i.book} (${i.date})
+        <b>${i.returned ? "Returned" : "Not Returned"}</b>
 
-      ${!i.returned ? `<button onclick="returnBook(${index})">Return</button>` : ""}
-    </div>`;
+        ${!i.returned ? `<button onclick="returnBook(${index})">Return</button>` : ""}
+      </div>
+    `;
   });
 
-  issueList.innerHTML = html;
+  document.getElementById("issueList").innerHTML = html;
 }
 
-// ================= DROPDOWNS =================
+// ================= DROPDOWN =================
 function loadDropdowns() {
   let s = "";
   students.forEach(st => {
-    s += `<option value="${st.roll}">${st.name}</option>`;
+    s += `<option value="${st.name}">${st.name}</option>`;
   });
-  selectStudent.innerHTML = s;
+  document.getElementById("selectStudent").innerHTML = s;
 
   let b = "";
   books.forEach(bk => {
     b += `<option value="${bk.name}">${bk.name}</option>`;
   });
-  selectBook.innerHTML = b;
+  document.getElementById("selectBook").innerHTML = b;
 }
 
 // ================= LOAD ALL =================

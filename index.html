@@ -11,8 +11,10 @@
 <!-- LOGIN -->
 <div id="loginPage" class="center">
   <h2>CLMS Login</h2>
+
   <input type="text" id="adminId" placeholder="Admin ID">
   <input type="password" id="adminPass" placeholder="Password">
+
   <button onclick="login()">Login</button>
 </div>
 
@@ -27,7 +29,7 @@
 <nav>
   <button onclick="showTab('students')">Students</button>
   <button onclick="showTab('books')">Books</button>
-  <button onclick="showTab('issue')">Issue / Return</button>
+  <button onclick="showTab('issue')">Issue</button>
 </nav>
 
 <!-- STUDENTS -->
@@ -38,7 +40,7 @@
   <input id="sRoll" placeholder="Roll Number">
   <button onclick="addStudent()">Add Student</button>
 
-  <input id="searchStudent" onkeyup="renderStudents()" placeholder="Search Roll">
+  <input id="searchStudent" placeholder="Search Roll" onkeyup="renderStudents()">
 
   <div id="studentList"></div>
 </section>
@@ -56,19 +58,20 @@
 
 <!-- ISSUE -->
 <section id="issue" class="tab hidden">
-  <h3>Issue / Return</h3>
+  <h3>Issue Book</h3>
 
   <select id="selectStudent"></select>
   <select id="selectBook"></select>
   <input type="date" id="issueDate">
 
-  <button onclick="issueBook()">Issue Book</button>
+  <button onclick="issueBook()">Issue</button>
 
   <div id="issueList"></div>
 </section>
 
 </div>
 
-<script src="script.js"></script>
+<script src="script.js" defer></script>
+
 </body>
 </html>

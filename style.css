@@ -1,0 +1,61 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f4f4;
+}
+
+.center {
+  width: 300px;
+  margin: 100px auto;
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, select {
+  width: 90%;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+button {
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+
+header {
+  background: #333;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav {
+  background: #444;
+  padding: 10px;
+}
+
+nav button {
+  background: #666;
+}
+
+.tab {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+}

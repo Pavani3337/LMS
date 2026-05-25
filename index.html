@@ -8,64 +8,64 @@
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="loginPage" class="center">
-  <h2>CLMS Admin Login</h2>
+  <h2>CLMS Login</h2>
   <input type="text" id="adminId" placeholder="Admin ID">
   <input type="password" id="adminPass" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app" class="hidden">
 
-  <header>
-    <h2>College Library Management System</h2>
-    <button onclick="logout()">Logout</button>
-  </header>
+<header>
+  <h2>CLMS Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</header>
 
-  <nav>
-    <button onclick="showTab('students')">Students</button>
-    <button onclick="showTab('books')">Books</button>
-    <button onclick="showTab('issue')">Issue Book</button>
-  </nav>
+<nav>
+  <button onclick="showTab('students')">Students</button>
+  <button onclick="showTab('books')">Books</button>
+  <button onclick="showTab('issue')">Issue / Return</button>
+</nav>
 
-  <!-- STUDENTS -->
-  <section id="students" class="tab">
-    <h3>Students</h3>
+<!-- STUDENTS -->
+<section id="students" class="tab">
+  <h3>Students</h3>
 
-    <input id="sName" placeholder="Full Name">
-    <input id="sRoll" placeholder="Roll Number">
-    <button onclick="addStudent()">Add Student</button>
+  <input id="sName" placeholder="Full Name">
+  <input id="sRoll" placeholder="Roll Number">
+  <button onclick="addStudent()">Add Student</button>
 
-    <input id="searchStudent" onkeyup="renderStudents()" placeholder="Search Roll Number">
+  <input id="searchStudent" onkeyup="renderStudents()" placeholder="Search Roll">
 
-    <div id="studentList"></div>
-  </section>
+  <div id="studentList"></div>
+</section>
 
-  <!-- BOOKS -->
-  <section id="books" class="tab hidden">
-    <h3>Books</h3>
+<!-- BOOKS -->
+<section id="books" class="tab hidden">
+  <h3>Books</h3>
 
-    <input id="bName" placeholder="Book Name">
-    <input id="bAuthor" placeholder="Author">
-    <button onclick="addBook()">Add Book</button>
+  <input id="bName" placeholder="Book Name">
+  <input id="bAuthor" placeholder="Author">
+  <button onclick="addBook()">Add Book</button>
 
-    <div id="bookList"></div>
-  </section>
+  <div id="bookList"></div>
+</section>
 
-  <!-- ISSUE -->
-  <section id="issue" class="tab hidden">
-    <h3>Issue Book</h3>
+<!-- ISSUE -->
+<section id="issue" class="tab hidden">
+  <h3>Issue / Return</h3>
 
-    <select id="selectStudent"></select>
-    <select id="selectBook"></select>
-    <input type="date" id="issueDate">
+  <select id="selectStudent"></select>
+  <select id="selectBook"></select>
+  <input type="date" id="issueDate">
 
-    <button onclick="issueBook()">Issue</button>
+  <button onclick="issueBook()">Issue Book</button>
 
-    <div id="issueList"></div>
-  </section>
+  <div id="issueList"></div>
+</section>
 
 </div>
 

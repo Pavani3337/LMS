@@ -1,31 +1,32 @@
 // ================= LOGIN =================
 function login() {
-  const id = document.getElementById("adminId").value;
-  const pass = document.getElementById("adminPass").value;
+  const id = adminId.value;
+  const pass = adminPass.value;
 
   if (id === "admin" && pass === "1234") {
-    localStorage.setItem("loggedIn", "true");
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("app").classList.remove("hidden");
-    loadAll();
+    localStorage.setItem("login", "true");
+    loginSuccess();
   } else {
     alert("Invalid Login");
   }
 }
 
 function logout() {
-  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("login");
   location.reload();
 }
 
-// Auto login check
-if (localStorage.getItem("loggedIn") === "true") {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("app").classList.remove("hidden");
+function loginSuccess() {
+  loginPage.style.display = "none";
+  app.classList.remove("hidden");
   loadAll();
 }
 
-// ================= STORAGE =================
+if (localStorage.getItem("login") === "true") {
+  loginSuccess();
+}
+
+// ================= DATA =================
 let students = JSON.parse(localStorage.getItem("students")) || [];
 let books = JSON.parse(localStorage.getItem("books")) || [];
 let issued = JSON.parse(localStorage.getItem("issued")) || [];
@@ -48,17 +49,28 @@ function addStudent() {
   loadDropdowns();
 }
 
-function renderStudents() {
-  let search = document.getElementById("searchStudent").value.toLowerCase();
+function deleteStudent(i) {
+  students.splice(i, 1);
+  localStorage.setItem("students", JSON.stringify(students));
+  renderStudents();
+  loadDropdowns();
+}
 
+function renderStudents() {
+  let search = searchStudent.value.toLowerCase();
   let html = "";
+
   students
     .filter(s => s.roll.toLowerCase().includes(search))
     .forEach((s, i) => {
-      html += `<div class="card">${s.name} - ${s.roll}</div>`;
+      html += `
+      <div class="card">
+        ${s.name} - ${s.roll}
+        <button onclick="deleteStudent(${i})">Delete</button>
+      </div>`;
     });
 
-  document.getElementById("studentList").innerHTML = html;
+  studentList.innerHTML = html;
 }
 
 // ================= BOOKS =================
@@ -73,17 +85,63 @@ function addBook() {
   loadDropdowns();
 }
 
+function deleteBook(i) {
+  books.splice(i, 1);
+  localStorage.setItem("books", JSON.stringify(books));
+  renderBooks();
+  loadDropdowns();
+}
+
 function renderBooks() {
   let html = "";
 
-  books.forEach(b => {
-    html += `<div class="card">${b.name} - ${b.author}</div>`;
+  books.forEach((b, i) => {
+    html += `
+    <div class="card">
+      ${b.name} - ${b.author}
+      <button onclick="deleteBook(${i})">Delete</button>
+    </div>`;
   });
 
-  document.getElementById("bookList").innerHTML = html;
+  bookList.innerHTML = html;
 }
 
-// ================= ISSUE BOOK =================
+// ================= ISSUE =================
+function issueBook() {
+  issued.push({
+    student: selectStudent.value,
+    book: selectBook.value,
+    date: issueDate.value,
+    returned: false
+  });
+
+  localStorage.setItem("issued", JSON.stringify(issued));
+  renderIssued();
+}
+
+function returnBook(i) {
+  issued[i].returned = true;
+  localStorage.setItem("issued", JSON.stringify(issued));
+  renderIssued();
+}
+
+function renderIssued() {
+  let html = "";
+
+  issued.forEach((i, index) => {
+    html += `
+    <div class="card">
+      ${i.student} → ${i.book} (${i.date})
+      <b>${i.returned ? "Returned" : "Not Returned"}</b>
+
+      ${!i.returned ? `<button onclick="returnBook(${index})">Return</button>` : ""}
+    </div>`;
+  });
+
+  issueList.innerHTML = html;
+}
+
+// ================= DROPDOWNS =================
 function loadDropdowns() {
   let s = "";
   students.forEach(st => {
@@ -96,29 +154,6 @@ function loadDropdowns() {
     b += `<option value="${bk.name}">${bk.name}</option>`;
   });
   selectBook.innerHTML = b;
-}
-
-function issueBook() {
-  issued.push({
-    student: selectStudent.value,
-    book: selectBook.value,
-    date: issueDate.value
-  });
-
-  localStorage.setItem("issued", JSON.stringify(issued));
-  renderIssued();
-}
-
-function renderIssued() {
-  let html = "";
-
-  issued.forEach(i => {
-    html += `<div class="card">
-      ${i.student} → ${i.book} (${i.date})
-    </div>`;
-  });
-
-  document.getElementById("issueList").innerHTML = html;
 }
 
 // ================= LOAD ALL =================

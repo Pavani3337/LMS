@@ -21,21 +21,30 @@ window.onload = function () {
 
 function login() {
 
-    const id = document.getElementById("adminId").value;
-    const password = document.getElementById("adminPassword").value;
+    const id =
+        document.getElementById("adminId").value;
 
-    if (id === ADMIN_ID && password === ADMIN_PASSWORD) {
+    const password =
+        document.getElementById("adminPassword").value;
 
-        isAdminLoggedIn = true;
+    if (
+        id === ADMIN_ID &&
+        password === ADMIN_PASSWORD
+    ) {
 
-        document.getElementById("loginPage").classList.add("hidden");
-        document.getElementById("dashboardPage").classList.remove("hidden");
+        document
+            .getElementById("loginPage")
+            .classList.add("hidden");
 
-        // IMPORTANT: show only dashboard default
-        hideSections();
+        document
+            .getElementById("dashboardPage")
+            .classList.remove("hidden");
 
-    } else {
+    }
+    else {
+
         alert("Invalid Login");
+
     }
 }
 
@@ -60,20 +69,17 @@ function hideSections() {
 
 function showSection(id) {
 
-    if (!isAdminLoggedIn) {
-        alert("Please login first");
-        return;
-    }
-
     hideSections();
 
-    document.getElementById(id).classList.remove("hidden");
+    document
+        .getElementById(id)
+        .classList.remove("hidden");
 
     if (id === "booksSection") {
         loadBooks();
     }
-}
 
+}
 
 function registerStudent() {
 
@@ -212,25 +218,28 @@ function loadBooks() {
 
 function loadStudents(branch) {
 
-    if (!isAdminLoggedIn) {
-        alert("Please login first");
-        return;
-    }
-
     currentBranch = branch;
 
     hideSections();
 
-    document.getElementById("studentsSection").classList.remove("hidden");
+    document
+        .getElementById("studentsSection")
+        .classList.remove("hidden");
 
-    const students = JSON.parse(localStorage.getItem("students")) || [];
+    const students =
+        JSON.parse(
+            localStorage.getItem("students")
+        );
 
     const filteredStudents =
-        students.filter(student => student.branch === branch);
+        students.filter(
+            student =>
+                student.branch === branch
+        );
 
     renderStudents(filteredStudents);
-}
 
+}
 
 function renderStudents(students) {
 
@@ -304,19 +313,50 @@ function searchStudent() {
 
 function showProfile(studentId) {
 
-    if (!isAdminLoggedIn) {
-        alert("Please login first");
-        return;
-    }
-
     hideSections();
-    document.getElementById("profileSection").classList.remove("hidden");
 
-    const students = JSON.parse(localStorage.getItem("students")) || [];
+    document
+        .getElementById("profileSection")
+        .classList.remove("hidden");
 
-    currentStudent = students.find(s => s.id == studentId);
+    const students =
+        JSON.parse(
+            localStorage.getItem("students")
+        );
 
-    if (!currentStudent) return;
+    currentStudent =
+        students.find(
+            student =>
+                student.id == studentId
+        );
+
+    document
+        .getElementById("profileName")
+        .innerText =
+        currentStudent.name;
+
+    document
+        .getElementById("profileRoll")
+        .innerText =
+        "Roll Number : " +
+        currentStudent.roll;
+
+    document
+        .getElementById("profileBranch")
+        .innerText =
+        "Branch : " +
+        currentStudent.branch;
+
+    document
+        .getElementById("profilePhoto")
+        .src =
+        currentStudent.photo ||
+        "https://via.placeholder.com/120";
+
+    loadIssuedBooks();
+
+}
+
 
 // =========================
 // PART 3

@@ -1,140 +1,275 @@
-const students = {
-    CSE: [
-        {
-            name: "Pavani",
-            roll: "22CSE001"
-        },
-        {
-            name: "Raju",
-            roll: "22CSE002"
-        }
-    ],
+// -------------------------
+// ADMIN LOGIN
+// -------------------------
 
-    ECE: [
-        {
-            name: "Sita",
-            roll: "22ECE001"
-        }
-    ],
+const ADMIN_ID = "admin";
+const ADMIN_PASSWORD = "1234";
 
-    EEE: [
-        {
-            name: "Kiran",
-            roll: "22EEE001"
-        }
-    ]
+let selectedBranch = "";
+let selectedStudent = null;
+
+// -------------------------
+// INITIAL LOAD
+// -------------------------
+
+window.onload = function () {
+
+    if (!localStorage.getItem("students")) {
+        localStorage.setItem("students", JSON.stringify([]));
+    }
+
+    if (!localStorage.getItem("books")) {
+        localStorage.setItem("books", JSON.stringify([]));
+    }
+
 };
 
-let currentStudents = [];
+// -------------------------
+// LOGIN
+// -------------------------
 
-function login(){
+function login() {
 
-    let id =
+    const id =
         document.getElementById("adminId").value;
 
-    let pass =
-        document.getElementById("adminPass").value;
+    const password =
+        document.getElementById("adminPassword").value;
 
-    if(id==="admin" && pass==="1234"){
+    if (
+        id === ADMIN_ID &&
+        password === ADMIN_PASSWORD
+    ) {
 
-        document.getElementById(
-            "loginPage"
-        ).classList.add("hidden");
+        hideAllPages();
 
-        document.getElementById(
-            "branchPage"
-        ).classList.remove("hidden");
+        document
+            .getElementById("dashboardPage")
+            .classList.remove("hidden");
 
-    }
-    else{
+    } else {
+
         alert("Invalid Login");
+
     }
 }
 
-function showStudents(branch){
+// -------------------------
+// LOGOUT
+// -------------------------
 
-    currentStudents = students[branch];
+function logout() {
 
-    document.getElementById(
-        "branchPage"
-    ).classList.add("hidden");
+    hideAllPages();
 
-    document.getElementById(
-        "studentPage"
-    ).classList.remove("hidden");
+    document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
 
-    loadStudents(currentStudents);
 }
 
-function loadStudents(data){
+// -------------------------
+// PAGE NAVIGATION
+// -------------------------
 
-    let html="";
+function hideAllPages() {
 
-    data.forEach((s,index)=>{
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+
+            page.classList.add("hidden");
+
+        });
+
+}
+
+function goDashboard() {
+
+    hideAllPages();
+
+    document
+        .getElementById("dashboardPage")
+        .classList.remove("hidden");
+
+}
+
+function showBranchPage() {
+
+    hideAllPages();
+
+    document
+        .getElementById("branchPage")
+        .classList.remove("hidden");
+
+}
+
+function showStudentRegistration() {
+
+    hideAllPages();
+
+    document
+        .getElementById("studentRegistrationPage")
+        .classList.remove("hidden");
+
+}
+
+function showBooksPage() {
+
+    hideAllPages();
+
+    document
+        .getElementById("booksPage")
+        .classList.remove("hidden");
+
+    loadBooks();
+
+}
+
+// -------------------------
+// STUDENT REGISTRATION
+// -------------------------
+
+function registerStudent() {
+
+    const name =
+        document.getElementById("studentName").value;
+
+    const roll =
+        document.getElementById("studentRoll").value;
+
+    const branch =
+        document.getElementById("studentBranch").value;
+
+    const photo =
+        document.getElementById("studentPhotoUrl").value;
+
+    if (
+        !name ||
+        !roll ||
+        !branch
+    ) {
+
+        alert("Fill all fields");
+        return;
+
+    }
+
+    const students =
+        JSON.parse(
+            localStorage.getItem("students")
+        );
+
+    students.push({
+
+        id: Date.now(),
+
+        name: name,
+
+        roll: roll,
+
+        branch: branch,
+
+        photo: photo,
+
+        issuedBooks: []
+
+    });
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+    alert("Student Registered");
+
+    document.getElementById("studentName").value = "";
+    document.getElementById("studentRoll").value = "";
+    document.getElementById("studentPhotoUrl").value = "";
+
+}
+
+// -------------------------
+// ADD BOOK
+// -------------------------
+
+function addBook() {
+
+    const serial =
+        document.getElementById("bookSerial").value;
+
+    const bookName =
+        document.getElementById("bookName").value;
+
+    const author =
+        document.getElementById("bookAuthor").value;
+
+    if (
+        !serial ||
+        !bookName ||
+        !author
+    ) {
+
+        alert("Fill all fields");
+        return;
+
+    }
+
+    const books =
+        JSON.parse(
+            localStorage.getItem("books")
+        );
+
+    books.push({
+
+        serial: serial,
+
+        name: bookName,
+
+        author: author
+
+    });
+
+    localStorage.setItem(
+        "books",
+        JSON.stringify(books)
+    );
+
+    loadBooks();
+
+    document.getElementById("bookSerial").value = "";
+    document.getElementById("bookName").value = "";
+    document.getElementById("bookAuthor").value = "";
+
+}
+
+// -------------------------
+// LOAD BOOKS TABLE
+// -------------------------
+
+function loadBooks() {
+
+    const books =
+        JSON.parse(
+            localStorage.getItem("books")
+        );
+
+    let html = "";
+
+    books.forEach(book => {
 
         html += `
-        <tr onclick="showProfile('${s.name}','${s.roll}')">
-            <td>${index+1}</td>
-            <td>${s.name}</td>
-            <td>${s.roll}</td>
-        </tr>`;
+        <tr>
+            <td>${book.serial}</td>
+            <td>${book.name}</td>
+            <td>${book.author}</td>
+        </tr>
+        `;
+
     });
 
     document.getElementById(
-        "studentTable"
+        "booksTable"
     ).innerHTML = html;
-}
 
-function searchStudent(){
-
-    let value =
-      document.getElementById(
-      "searchBox"
-      ).value.toLowerCase();
-
-    let filtered =
-      currentStudents.filter(
-      s => s.roll.toLowerCase()
-      .includes(value)
-      );
-
-    loadStudents(filtered);
-}
-
-function showProfile(name,roll){
-
-    document.getElementById(
-        "studentPage"
-    ).classList.add("hidden");
-
-    document.getElementById(
-        "profilePage"
-    ).classList.remove("hidden");
-
-    document.getElementById(
-        "studentName"
-    ).innerText = name;
-
-    document.getElementById(
-        "studentRoll"
-    ).innerText = roll;
-}
-
-function issueBook(){
-
-    let table =
-      document.getElementById(
-      "bookTable"
-      );
-
-    let row =
-      table.insertRow();
-
-    row.innerHTML = `
-      <td>${table.rows.length}</td>
-      <td>Java</td>
-      <td>Balagurusamy</td>
-      <td>01-06-2026</td>
-      <td>15-06-2026</td>
-    `;
 }

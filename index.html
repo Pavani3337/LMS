@@ -1,76 +1,321 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CLMS Prototype</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Library Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="loginPage">
-    <h2>Admin Login</h2>
-    <input type="text" id="adminId" placeholder="Admin ID">
-    <input type="password" id="adminPass" placeholder="Password">
-    <button onclick="login()">Login</button>
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="page">
+    <h1>College Library Management System</h1>
+
+    <div class="card">
+        <h2>Admin Login</h2>
+
+        <input type="text" id="adminId" placeholder="Admin ID">
+
+        <input type="password" id="adminPassword" placeholder="Password">
+
+        <button onclick="login()">Login</button>
+    </div>
 </div>
 
-<div id="branchPage" class="hidden">
-    <h2>Select Branch</h2>
+<!-- DASHBOARD -->
+<div id="dashboardPage" class="page hidden">
 
-    <button onclick="showStudents('CSE')">CSE</button>
-    <button onclick="showStudents('ECE')">ECE</button>
-    <button onclick="showStudents('EEE')">EEE</button>
+    <div class="header">
+        <h2>Library Dashboard</h2>
+
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <div class="menu">
+
+        <button onclick="showBranchPage()">
+            Branches
+        </button>
+
+        <button onclick="showStudentRegistration()">
+            Register Student
+        </button>
+
+        <button onclick="showBooksPage()">
+            Books
+        </button>
+
+    </div>
+
 </div>
 
-<div id="studentPage" class="hidden">
+<!-- BRANCH PAGE -->
+<div id="branchPage" class="page hidden">
 
-    <h2>Students</h2>
+    <div class="header">
+        <h2>Select Branch</h2>
+
+        <button onclick="goDashboard()">
+            Back
+        </button>
+    </div>
+
+    <div class="branchButtons">
+
+        <button onclick="loadStudents('CSE')">
+            CSE
+        </button>
+
+        <button onclick="loadStudents('ECE')">
+            ECE
+        </button>
+
+        <button onclick="loadStudents('EEE')">
+            EEE
+        </button>
+
+        <button onclick="loadStudents('MECH')">
+            MECH
+        </button>
+
+        <button onclick="loadStudents('CIVIL')">
+            CIVIL
+        </button>
+
+    </div>
+
+</div>
+
+<!-- STUDENT LIST PAGE -->
+<div id="studentListPage" class="page hidden">
+
+    <div class="header">
+
+        <h2>Students</h2>
+
+        <button onclick="showBranchPage()">
+            Back
+        </button>
+
+    </div>
 
     <input
         type="text"
         id="searchBox"
         placeholder="Search Roll Number"
-        onkeyup="searchStudent()">
+        onkeyup="searchStudent()"
+    >
 
     <table>
+
         <thead>
+
             <tr>
                 <th>S.No</th>
                 <th>Full Name</th>
                 <th>Roll Number</th>
             </tr>
+
         </thead>
 
-        <tbody id="studentTable"></tbody>
+        <tbody id="studentTable">
+
+        </tbody>
+
     </table>
 
 </div>
 
-<div id="profilePage" class="hidden">
+<!-- STUDENT PROFILE PAGE -->
+<div id="profilePage" class="page hidden">
 
-    <h2>Student Profile</h2>
+    <div class="header">
 
-    <img
-      src="https://via.placeholder.com/120"
-      width="120">
+        <h2>Student Profile</h2>
 
-    <h3 id="studentName"></h3>
-    <p id="studentRoll"></p>
+        <button onclick="backToStudents()">
+            Back
+        </button>
+
+    </div>
+
+    <div class="profileBox">
+
+        <img
+            id="studentPhoto"
+            src=""
+            alt="Student Photo"
+        >
+
+        <h3 id="profileName"></h3>
+
+        <p id="profileRoll"></p>
+
+        <p id="profileBranch"></p>
+
+    </div>
+
+    <h3>Issued Books</h3>
 
     <table>
+
         <thead>
+
             <tr>
                 <th>S.No</th>
-                <th>Book</th>
+                <th>Book Name</th>
                 <th>Author</th>
                 <th>Issue Date</th>
                 <th>Due Date</th>
+                <th>Return Date</th>
             </tr>
+
         </thead>
 
-        <tbody id="bookTable"></tbody>
+        <tbody id="issuedBooksTable">
+
+        </tbody>
+
     </table>
 
-    <button onclick="issueBook()">Issue Book</button>
+    <button onclick="showIssueBookForm()">
+        Issue Book
+    </button>
+
+    <div id="issueBookForm" class="hidden">
+
+        <h3>Issue New Book</h3>
+
+        <select id="bookSelect">
+
+        </select>
+
+        <input
+            type="date"
+            id="issueDate"
+        >
+
+        <input
+            type="date"
+            id="dueDate"
+        >
+
+        <button onclick="issueBook()">
+            Save
+        </button>
+
+    </div>
+
+</div>
+
+<!-- STUDENT REGISTRATION -->
+<div id="studentRegistrationPage" class="page hidden">
+
+    <div class="header">
+
+        <h2>Register Student</h2>
+
+        <button onclick="goDashboard()">
+            Back
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Full Name"
+        >
+
+        <input
+            type="text"
+            id="studentRoll"
+            placeholder="Roll Number"
+        >
+
+        <select id="studentBranch">
+
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="MECH">MECH</option>
+            <option value="CIVIL">CIVIL</option>
+
+        </select>
+
+        <input
+            type="text"
+            id="studentPhotoUrl"
+            placeholder="Photo URL"
+        >
+
+        <button onclick="registerStudent()">
+            Register Student
+        </button>
+
+    </div>
+
+</div>
+
+<!-- BOOKS PAGE -->
+<div id="booksPage" class="page hidden">
+
+    <div class="header">
+
+        <h2>Books Management</h2>
+
+        <button onclick="goDashboard()">
+            Back
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <input
+            type="text"
+            id="bookSerial"
+            placeholder="Serial Number"
+        >
+
+        <input
+            type="text"
+            id="bookName"
+            placeholder="Book Name"
+        >
+
+        <input
+            type="text"
+            id="bookAuthor"
+            placeholder="Author Name"
+        >
+
+        <button onclick="addBook()">
+            Add Book
+        </button>
+
+    </div>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Serial Number</th>
+                <th>Book Name</th>
+                <th>Author Name</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="booksTable">
+
+        </tbody>
+
+    </table>
 
 </div>
 

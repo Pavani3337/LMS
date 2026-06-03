@@ -1,6 +1,6 @@
 const ADMIN_ID = "admin";
 const ADMIN_PASSWORD = "1234";
-let isAdminLoggedIn = false;
+
 let currentBranch = "";
 let currentStudent = null;
 

@@ -16,13 +16,6 @@ function initStorage() {
 
 window.onload = function () {
     initStorage();
-
-    isAdminLoggedIn = false;
-
-    document.getElementById("loginPage").classList.remove("hidden");
-    document.getElementById("dashboardPage").classList.add("hidden");
-
-    hideSections();
 };
 
 

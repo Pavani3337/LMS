@@ -1,6 +1,6 @@
 const ADMIN_ID = "admin";
 const ADMIN_PASSWORD = "1234";
-
+let isAdminLoggedIn = false;
 let currentBranch = "";
 let currentStudent = null;
 
@@ -212,28 +212,25 @@ function loadBooks() {
 
 function loadStudents(branch) {
 
+    if (!isAdminLoggedIn) {
+        alert("Please login first");
+        return;
+    }
+
     currentBranch = branch;
 
     hideSections();
 
-    document
-        .getElementById("studentsSection")
-        .classList.remove("hidden");
+    document.getElementById("studentsSection").classList.remove("hidden");
 
-    const students =
-        JSON.parse(
-            localStorage.getItem("students")
-        );
+    const students = JSON.parse(localStorage.getItem("students")) || [];
 
     const filteredStudents =
-        students.filter(
-            student =>
-                student.branch === branch
-        );
+        students.filter(student => student.branch === branch);
 
     renderStudents(filteredStudents);
-
 }
+
 
 function renderStudents(students) {
 
@@ -307,49 +304,19 @@ function searchStudent() {
 
 function showProfile(studentId) {
 
+    if (!isAdminLoggedIn) {
+        alert("Please login first");
+        return;
+    }
+
     hideSections();
+    document.getElementById("profileSection").classList.remove("hidden");
 
-    document
-        .getElementById("profileSection")
-        .classList.remove("hidden");
+    const students = JSON.parse(localStorage.getItem("students")) || [];
 
-    const students =
-        JSON.parse(
-            localStorage.getItem("students")
-        );
+    currentStudent = students.find(s => s.id == studentId);
 
-    currentStudent =
-        students.find(
-            student =>
-                student.id == studentId
-        );
-
-    document
-        .getElementById("profileName")
-        .innerText =
-        currentStudent.name;
-
-    document
-        .getElementById("profileRoll")
-        .innerText =
-        "Roll Number : " +
-        currentStudent.roll;
-
-    document
-        .getElementById("profileBranch")
-        .innerText =
-        "Branch : " +
-        currentStudent.branch;
-
-    document
-        .getElementById("profilePhoto")
-        .src =
-        currentStudent.photo ||
-        "https://via.placeholder.com/120";
-
-    loadIssuedBooks();
-
-}
+    if (!currentStudent) return;
 
 // =========================
 // PART 3

@@ -1,80 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLMS</title>
-  <link rel="stylesheet" href="style.css">
+    <title>CLMS Prototype</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="loginPage" class="center">
-  <h2>CLMS Login</h2>
-
-  <input id="adminId" type="text" placeholder="Admin ID">
-  <input id="adminPass" type="password" placeholder="Password">
-
-  <button onclick="login()">Login</button>
+<div id="loginPage">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminId" placeholder="Admin ID">
+    <input type="password" id="adminPass" placeholder="Password">
+    <button onclick="login()">Login</button>
 </div>
 
-<!-- MAIN APP -->
-<div id="app" class="hidden">
+<div id="branchPage" class="hidden">
+    <h2>Select Branch</h2>
 
-  <header>
-    <h2>College Library Management System</h2>
-    <button onclick="logout()">Logout</button>
-  </header>
+    <button onclick="showStudents('CSE')">CSE</button>
+    <button onclick="showStudents('ECE')">ECE</button>
+    <button onclick="showStudents('EEE')">EEE</button>
+</div>
 
-  <nav>
-    <button onclick="showTab('students')">Students</button>
-    <button onclick="showTab('books')">Books</button>
-    <button onclick="showTab('issue')">Issue</button>
-  </nav>
+<div id="studentPage" class="hidden">
 
-  <!-- STUDENTS -->
-  <section id="students" class="tab">
-    <h3>Students</h3>
+    <h2>Students</h2>
 
-    <input id="sName" type="text" placeholder="Full Name">
-    <input id="sRoll" type="text" placeholder="Roll Number">
+    <input
+        type="text"
+        id="searchBox"
+        placeholder="Search Roll Number"
+        onkeyup="searchStudent()">
 
-    <button onclick="addStudent()">Add Student</button>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Full Name</th>
+                <th>Roll Number</th>
+            </tr>
+        </thead>
 
-    <input id="searchStudent" type="text" placeholder="Search Roll" onkeyup="renderStudents()">
+        <tbody id="studentTable"></tbody>
+    </table>
 
-    <div id="studentList"></div>
-  </section>
+</div>
 
-  <!-- BOOKS -->
-  <section id="books" class="tab hidden">
-    <h3>Books</h3>
+<div id="profilePage" class="hidden">
 
-    <input id="bName" type="text" placeholder="Book Name">
-    <input id="bAuthor" type="text" placeholder="Author">
+    <h2>Student Profile</h2>
 
-    <button onclick="addBook()">Add Book</button>
+    <img
+      src="https://via.placeholder.com/120"
+      width="120">
 
-    <div id="bookList"></div>
-  </section>
+    <h3 id="studentName"></h3>
+    <p id="studentRoll"></p>
 
-  <!-- ISSUE -->
-  <section id="issue" class="tab hidden">
-    <h3>Issue Books</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Issue Date</th>
+                <th>Due Date</th>
+            </tr>
+        </thead>
 
-    <select id="selectStudent"></select>
-    <select id="selectBook"></select>
-
-    <input id="issueDate" type="date">
+        <tbody id="bookTable"></tbody>
+    </table>
 
     <button onclick="issueBook()">Issue Book</button>
 
-    <div id="issueList"></div>
-  </section>
-
 </div>
 
-<script src="script.js" defer></script>
+<script src="script.js"></script>
 
 </body>
 </html>

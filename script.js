@@ -1,175 +1,140 @@
-// ================= LOGIN =================
-function login() {
-  const id = document.getElementById("adminId").value;
-  const pass = document.getElementById("adminPass").value;
+const students = {
+    CSE: [
+        {
+            name: "Pavani",
+            roll: "22CSE001"
+        },
+        {
+            name: "Raju",
+            roll: "22CSE002"
+        }
+    ],
 
-  if (id === "admin" && pass === "1234") {
-    localStorage.setItem("login", "true");
-    showApp();
-  } else {
-    alert("Invalid Login");
-  }
+    ECE: [
+        {
+            name: "Sita",
+            roll: "22ECE001"
+        }
+    ],
+
+    EEE: [
+        {
+            name: "Kiran",
+            roll: "22EEE001"
+        }
+    ]
+};
+
+let currentStudents = [];
+
+function login(){
+
+    let id =
+        document.getElementById("adminId").value;
+
+    let pass =
+        document.getElementById("adminPass").value;
+
+    if(id==="admin" && pass==="1234"){
+
+        document.getElementById(
+            "loginPage"
+        ).classList.add("hidden");
+
+        document.getElementById(
+            "branchPage"
+        ).classList.remove("hidden");
+
+    }
+    else{
+        alert("Invalid Login");
+    }
 }
 
-function logout() {
-  localStorage.removeItem("login");
-  location.reload();
+function showStudents(branch){
+
+    currentStudents = students[branch];
+
+    document.getElementById(
+        "branchPage"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "studentPage"
+    ).classList.remove("hidden");
+
+    loadStudents(currentStudents);
 }
 
-function showApp() {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("app").classList.remove("hidden");
-  loadAll();
-}
+function loadStudents(data){
 
-// auto login
-if (localStorage.getItem("login") === "true") {
-  showApp();
-}
+    let html="";
 
-// ================= DATA =================
-let students = JSON.parse(localStorage.getItem("students")) || [];
-let books = JSON.parse(localStorage.getItem("books")) || [];
-let issued = JSON.parse(localStorage.getItem("issued")) || [];
+    data.forEach((s,index)=>{
 
-// ================= TAB =================
-function showTab(tab) {
-  let sections = document.querySelectorAll(".tab");
-  sections.forEach(s => s.classList.add("hidden"));
-  document.getElementById(tab).classList.remove("hidden");
-}
-
-// ================= STUDENTS =================
-function addStudent() {
-  let name = document.getElementById("sName").value;
-  let roll = document.getElementById("sRoll").value;
-
-  if (!name || !roll) {
-    alert("Enter student details");
-    return;
-  }
-
-  students.push({ name, roll });
-  localStorage.setItem("students", JSON.stringify(students));
-
-  document.getElementById("sName").value = "";
-  document.getElementById("sRoll").value = "";
-
-  renderStudents();
-  loadDropdowns();
-}
-
-function renderStudents() {
-  let search = document.getElementById("searchStudent").value.toLowerCase();
-  let html = "";
-
-  students
-    .filter(s => s.roll.toLowerCase().includes(search))
-    .forEach((s, i) => {
-      html += `
-        <div class="card">
-          ${s.name} - ${s.roll}
-        </div>
-      `;
+        html += `
+        <tr onclick="showProfile('${s.name}','${s.roll}')">
+            <td>${index+1}</td>
+            <td>${s.name}</td>
+            <td>${s.roll}</td>
+        </tr>`;
     });
 
-  document.getElementById("studentList").innerHTML = html;
+    document.getElementById(
+        "studentTable"
+    ).innerHTML = html;
 }
 
-// ================= BOOKS =================
-function addBook() {
-  let name = document.getElementById("bName").value;
-  let author = document.getElementById("bAuthor").value;
+function searchStudent(){
 
-  if (!name || !author) {
-    alert("Enter book details");
-    return;
-  }
+    let value =
+      document.getElementById(
+      "searchBox"
+      ).value.toLowerCase();
 
-  books.push({ name, author });
-  localStorage.setItem("books", JSON.stringify(books));
+    let filtered =
+      currentStudents.filter(
+      s => s.roll.toLowerCase()
+      .includes(value)
+      );
 
-  document.getElementById("bName").value = "";
-  document.getElementById("bAuthor").value = "";
-
-  renderBooks();
-  loadDropdowns();
+    loadStudents(filtered);
 }
 
-function renderBooks() {
-  let html = "";
+function showProfile(name,roll){
 
-  books.forEach(b => {
-    html += `
-      <div class="card">
-        ${b.name} - ${b.author}
-      </div>
+    document.getElementById(
+        "studentPage"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "profilePage"
+    ).classList.remove("hidden");
+
+    document.getElementById(
+        "studentName"
+    ).innerText = name;
+
+    document.getElementById(
+        "studentRoll"
+    ).innerText = roll;
+}
+
+function issueBook(){
+
+    let table =
+      document.getElementById(
+      "bookTable"
+      );
+
+    let row =
+      table.insertRow();
+
+    row.innerHTML = `
+      <td>${table.rows.length}</td>
+      <td>Java</td>
+      <td>Balagurusamy</td>
+      <td>01-06-2026</td>
+      <td>15-06-2026</td>
     `;
-  });
-
-  document.getElementById("bookList").innerHTML = html;
-}
-
-// ================= ISSUE BOOK =================
-function issueBook() {
-  let student = document.getElementById("selectStudent").value;
-  let book = document.getElementById("selectBook").value;
-  let date = document.getElementById("issueDate").value;
-
-  if (!student || !book || !date) {
-    alert("Fill all fields");
-    return;
-  }
-
-  issued.push({ student, book, date, returned: false });
-  localStorage.setItem("issued", JSON.stringify(issued));
-
-  renderIssued();
-}
-
-// return book
-function returnBook(index) {
-  issued[index].returned = true;
-  localStorage.setItem("issued", JSON.stringify(issued));
-  renderIssued();
-}
-
-function renderIssued() {
-  let html = "";
-
-  issued.forEach((i, index) => {
-    html += `
-      <div class="card">
-        ${i.student} → ${i.book} (${i.date})
-        <b>${i.returned ? "Returned" : "Not Returned"}</b>
-
-        ${!i.returned ? `<button onclick="returnBook(${index})">Return</button>` : ""}
-      </div>
-    `;
-  });
-
-  document.getElementById("issueList").innerHTML = html;
-}
-
-// ================= DROPDOWN =================
-function loadDropdowns() {
-  let s = "";
-  students.forEach(st => {
-    s += `<option value="${st.name}">${st.name}</option>`;
-  });
-  document.getElementById("selectStudent").innerHTML = s;
-
-  let b = "";
-  books.forEach(bk => {
-    b += `<option value="${bk.name}">${bk.name}</option>`;
-  });
-  document.getElementById("selectBook").innerHTML = b;
-}
-
-// ================= LOAD ALL =================
-function loadAll() {
-  renderStudents();
-  renderBooks();
-  renderIssued();
-  loadDropdowns();
 }

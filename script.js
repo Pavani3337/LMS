@@ -90,52 +90,59 @@ function registerStudent() {
     const branch =
         document.getElementById("studentBranch").value;
 
-    const photo =
-        document.getElementById("studentPhoto").value;
+    const file =
+        document.getElementById("studentPhoto").files[0];
 
-    if (
-        !name ||
-        !roll
-    ) {
+    if (!name || !roll || !file) {
 
         alert("Fill all fields");
         return;
 
     }
 
-    const students =
-        JSON.parse(
-            localStorage.getItem("students")
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        const students =
+            JSON.parse(
+                localStorage.getItem("students")
+            );
+
+        students.push({
+
+            id: Date.now(),
+
+            name: name,
+
+            roll: roll,
+
+            branch: branch,
+
+            photo: e.target.result,
+
+            issuedBooks: []
+
+        });
+
+        localStorage.setItem(
+            "students",
+            JSON.stringify(students)
         );
 
-    students.push({
+        alert("Student Registered");
 
-        id: Date.now(),
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentRoll").value = "";
+        document.getElementById("studentPhoto").value = "";
 
-        name,
+    };
 
-        roll,
-
-        branch,
-
-        photo,
-
-        issuedBooks: []
-
-    });
-
-    localStorage.setItem(
-        "students",
-        JSON.stringify(students)
-    );
-
-    alert("Student Registered");
-
-    document.getElementById("studentName").value = "";
-    document.getElementById("studentRoll").value = "";
-    document.getElementById("studentPhoto").value = "";
+    reader.readAsDataURL(file);
 
 }
+
+
 
 function addBook() {
 
@@ -199,6 +206,12 @@ function loadBooks() {
             <td>${book.serial}</td>
             <td>${book.name}</td>
             <td>${book.author}</td>
+
+            <td>
+                <button onclick="deleteBook('${book.serial}')">
+                    Delete
+                </button>
+            </td>
         </tr>
         `;
 
@@ -209,6 +222,7 @@ function loadBooks() {
     ).innerHTML = html;
 
 }
+
 
 // =========================
 // PART 2
@@ -247,10 +261,26 @@ function renderStudents(students) {
     students.forEach((student, index) => {
 
         html += `
-        <tr onclick="showProfile(${student.id})">
-            <td>${index + 1}</td>
-            <td>${student.name}</td>
-            <td>${student.roll}</td>
+        <tr>
+
+            <td onclick="showProfile(${student.id})">
+                ${index + 1}
+            </td>
+
+            <td onclick="showProfile(${student.id})">
+                ${student.name}
+            </td>
+
+            <td onclick="showProfile(${student.id})">
+                ${student.roll}
+            </td>
+
+            <td>
+                <button onclick="deleteStudent(${student.id})">
+                    Delete
+                </button>
+            </td>
+
         </tr>
         `;
 
@@ -261,6 +291,9 @@ function renderStudents(students) {
         .innerHTML = html;
 
 }
+
+
+
 
 function searchStudent() {
 
@@ -510,5 +543,58 @@ function issueBook() {
         .value = "";
 
     alert("Book Issued Successfully");
+
+}
+
+
+function deleteStudent(studentId) {
+
+    if (!confirm("Delete this student?")) {
+        return;
+    }
+
+    let students =
+        JSON.parse(
+            localStorage.getItem("students")
+        );
+
+    students =
+        students.filter(
+            student =>
+                student.id !== studentId
+        );
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+    loadStudents(currentBranch);
+
+}
+
+function deleteBook(serial) {
+
+    if (!confirm("Delete this book?")) {
+        return;
+    }
+
+    let books =
+        JSON.parse(
+            localStorage.getItem("books")
+        );
+
+    books =
+        books.filter(
+            book =>
+                book.serial !== serial
+        );
+
+    localStorage.setItem(
+        "books",
+        JSON.stringify(books)
+    );
+
+    loadBooks();
 
 }

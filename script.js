@@ -147,55 +147,42 @@ function registerStudent() {
 function addBook() {
 
     const serial =
-        document.getElementById("bookSerial").value;
+        document.getElementById("bookSerial").value.trim();
 
     const name =
-        document.getElementById("bookName").value;
+        document.getElementById("bookName").value.trim();
 
     const author =
-        document.getElementById("bookAuthor").value;
+        document.getElementById("bookAuthor").value.trim();
 
-    if (
-        !serial ||
-        !name ||
-        !author
-    ) {
-
-        alert("Fill all fields");
+    if (!serial || !name || !author) {
+        alert("Fill all fields properly");
         return;
-
     }
 
     const books =
-        JSON.parse(
-            localStorage.getItem("books")
-        );
+        JSON.parse(localStorage.getItem("books")) || [];
 
     books.push({
-        serial,
-        name,
-        author
+        serial: serial,
+        name: name,
+        author: author
     });
 
-    localStorage.setItem(
-        "books",
-        JSON.stringify(books)
-    );
+    localStorage.setItem("books", JSON.stringify(books));
 
     loadBooks();
 
     document.getElementById("bookSerial").value = "";
     document.getElementById("bookName").value = "";
     document.getElementById("bookAuthor").value = "";
-
 }
+
 
 function loadBooks() {
 
     const books =
-        JSON.parse(
-            localStorage.getItem("books")
-        );
+        JSON.parse(localStorage.getItem("books")) || [];
 
     let html = "";
 
@@ -203,9 +190,9 @@ function loadBooks() {
 
         html += `
         <tr>
-            <td>${book.serial}</td>
-            <td>${book.name}</td>
-            <td>${book.author}</td>
+            <td>${book.serial || "-"}</td>
+            <td>${book.name || "-"}</td>
+            <td>${book.author || "-"}</td>
 
             <td>
                 <button onclick="deleteBook('${book.serial}')">
@@ -217,11 +204,9 @@ function loadBooks() {
 
     });
 
-    document.getElementById(
-        "booksTable"
-    ).innerHTML = html;
-
+    document.getElementById("booksTable").innerHTML = html;
 }
+
 
 
 // =========================
@@ -575,26 +560,15 @@ function deleteStudent(studentId) {
 
 function deleteBook(serial) {
 
-    if (!confirm("Delete this book?")) {
-        return;
-    }
+    if (!confirm("Delete this book?")) return;
 
     let books =
-        JSON.parse(
-            localStorage.getItem("books")
-        );
+        JSON.parse(localStorage.getItem("books")) || [];
 
     books =
-        books.filter(
-            book =>
-                book.serial !== serial
-        );
+        books.filter(book => book.serial !== serial);
 
-    localStorage.setItem(
-        "books",
-        JSON.stringify(books)
-    );
+    localStorage.setItem("books", JSON.stringify(books));
 
     loadBooks();
-
 }

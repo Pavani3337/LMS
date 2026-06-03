@@ -18,34 +18,27 @@ window.onload = function () {
     initStorage();
 };
 
+
 function login() {
 
-    const id =
-        document.getElementById("adminId").value;
+    const id = document.getElementById("adminId").value;
+    const password = document.getElementById("adminPassword").value;
 
-    const password =
-        document.getElementById("adminPassword").value;
+    if (id === ADMIN_ID && password === ADMIN_PASSWORD) {
 
-    if (
-        id === ADMIN_ID &&
-        password === ADMIN_PASSWORD
-    ) {
+        isAdminLoggedIn = true;
 
-        document
-            .getElementById("loginPage")
-            .classList.add("hidden");
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("dashboardPage").classList.remove("hidden");
 
-        document
-            .getElementById("dashboardPage")
-            .classList.remove("hidden");
+        // IMPORTANT: show only dashboard default
+        hideSections();
 
-    }
-    else {
-
+    } else {
         alert("Invalid Login");
-
     }
 }
+
 
 function logout() {
 
@@ -67,17 +60,20 @@ function hideSections() {
 
 function showSection(id) {
 
+    if (!isAdminLoggedIn) {
+        alert("Please login first");
+        return;
+    }
+
     hideSections();
 
-    document
-        .getElementById(id)
-        .classList.remove("hidden");
+    document.getElementById(id).classList.remove("hidden");
 
     if (id === "booksSection") {
         loadBooks();
     }
-
 }
+
 
 function registerStudent() {
 

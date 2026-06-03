@@ -1,312 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Library Management System</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Library Management System</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
-<div id="loginPage" class="page">
-    <h1>College Library Management System</h1>
+<h1>College Library Management System</h1>
 
-    <div class="card">
-        <h2>Admin Login</h2>
+<!-- LOGIN -->
 
-        <input type="text" id="adminId" placeholder="Admin ID">
+<div id="loginPage">
 
-        <input type="password" id="adminPassword" placeholder="Password">
+    <h2>Admin Login</h2>
 
-        <button onclick="login()">Login</button>
-    </div>
+    <input id="adminId" placeholder="Admin ID">
+
+    <input
+        id="adminPassword"
+        type="password"
+        placeholder="Password">
+
+    <button onclick="login()">
+        Login
+    </button>
+
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboardPage" class="page hidden">
 
-    <div class="header">
-        <h2>Library Dashboard</h2>
+<div id="dashboardPage" class="hidden">
 
-        <button onclick="logout()">Logout</button>
-    </div>
-
-    <div class="menu">
-
-        <button onclick="showBranchPage()">
-            Branches
-        </button>
-
-        <button onclick="showStudentRegistration()">
-            Register Student
-        </button>
-
-        <button onclick="showBooksPage()">
-            Books
-        </button>
-
-    </div>
-
-</div>
-
-<!-- BRANCH PAGE -->
-<div id="branchPage" class="page hidden">
-
-    <div class="header">
-        <h2>Select Branch</h2>
-
-        <button onclick="goDashboard()">
-            Back
-        </button>
-    </div>
-
-    <div class="branchButtons">
-
-        <button onclick="loadStudents('CSE')">
-            CSE
-        </button>
-
-        <button onclick="loadStudents('ECE')">
-            ECE
-        </button>
-
-        <button onclick="loadStudents('EEE')">
-            EEE
-        </button>
-
-        <button onclick="loadStudents('MECH')">
-            MECH
-        </button>
-
-        <button onclick="loadStudents('CIVIL')">
-            CIVIL
-        </button>
-
-    </div>
-
-</div>
-
-<!-- STUDENT LIST PAGE -->
-<div id="studentListPage" class="page hidden">
-
-    <div class="header">
-
-        <h2>Students</h2>
-
-        <button onclick="showBranchPage()">
-            Back
-        </button>
-
-    </div>
-
-    <input
-        type="text"
-        id="searchBox"
-        placeholder="Search Roll Number"
-        onkeyup="searchStudent()"
-    >
-
-    <table>
-
-        <thead>
-
-            <tr>
-                <th>S.No</th>
-                <th>Full Name</th>
-                <th>Roll Number</th>
-            </tr>
-
-        </thead>
-
-        <tbody id="studentTable">
-
-        </tbody>
-
-    </table>
-
-</div>
-
-<!-- STUDENT PROFILE PAGE -->
-<div id="profilePage" class="page hidden">
-
-    <div class="header">
-
-        <h2>Student Profile</h2>
-
-        <button onclick="backToStudents()">
-            Back
-        </button>
-
-    </div>
-
-    <div class="profileBox">
-
-        <img
-            id="studentPhoto"
-            src=""
-            alt="Student Photo"
-        >
-
-        <h3 id="profileName"></h3>
-
-        <p id="profileRoll"></p>
-
-        <p id="profileBranch"></p>
-
-    </div>
-
-    <h3>Issued Books</h3>
-
-    <table>
-
-        <thead>
-
-            <tr>
-                <th>S.No</th>
-                <th>Book Name</th>
-                <th>Author</th>
-                <th>Issue Date</th>
-                <th>Due Date</th>
-                <th>Return Date</th>
-            </tr>
-
-        </thead>
-
-        <tbody id="issuedBooksTable">
-
-        </tbody>
-
-    </table>
-
-    <button onclick="showIssueBookForm()">
-        Issue Book
+    <button onclick="showSection('registerSection')">
+        Register Student
     </button>
 
-    <div id="issueBookForm" class="hidden">
+    <button onclick="showSection('booksSection')">
+        Books
+    </button>
 
-        <h3>Issue New Book</h3>
+    <button onclick="showSection('branchesSection')">
+        Branches
+    </button>
 
-        <select id="bookSelect">
-
-        </select>
-
-        <input
-            type="date"
-            id="issueDate"
-        >
-
-        <input
-            type="date"
-            id="dueDate"
-        >
-
-        <button onclick="issueBook()">
-            Save
-        </button>
-
-    </div>
+    <button onclick="logout()">
+        Logout
+    </button>
 
 </div>
 
 <!-- STUDENT REGISTRATION -->
-<div id="studentRegistrationPage" class="page hidden">
 
-    <div class="header">
+<div id="registerSection" class="hidden section">
 
-        <h2>Register Student</h2>
+    <h2>Register Student</h2>
 
-        <button onclick="goDashboard()">
-            Back
-        </button>
+    <input
+        id="studentName"
+        placeholder="Full Name">
 
-    </div>
+    <input
+        id="studentRoll"
+        placeholder="Roll Number">
 
-    <div class="card">
+    <select id="studentBranch">
 
-        <input
-            type="text"
-            id="studentName"
-            placeholder="Full Name"
-        >
+        <option>CSE</option>
+        <option>ECE</option>
+        <option>EEE</option>
+        <option>MECH</option>
+        <option>CIVIL</option>
 
-        <input
-            type="text"
-            id="studentRoll"
-            placeholder="Roll Number"
-        >
+    </select>
 
-        <select id="studentBranch">
+    <input
+        id="studentPhoto"
+        placeholder="Photo URL">
 
-            <option value="CSE">CSE</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="MECH">MECH</option>
-            <option value="CIVIL">CIVIL</option>
-
-        </select>
-
-        <input
-            type="text"
-            id="studentPhotoUrl"
-            placeholder="Photo URL"
-        >
-
-        <button onclick="registerStudent()">
-            Register Student
-        </button>
-
-    </div>
+    <button onclick="registerStudent()">
+        Register
+    </button>
 
 </div>
 
-<!-- BOOKS PAGE -->
-<div id="booksPage" class="page hidden">
+<!-- BOOKS -->
 
-    <div class="header">
+<div id="booksSection" class="hidden section">
 
-        <h2>Books Management</h2>
+    <h2>Books Management</h2>
 
-        <button onclick="goDashboard()">
-            Back
-        </button>
+    <input
+        id="bookSerial"
+        placeholder="Serial Number">
 
-    </div>
+    <input
+        id="bookName"
+        placeholder="Book Name">
 
-    <div class="card">
+    <input
+        id="bookAuthor"
+        placeholder="Author Name">
 
-        <input
-            type="text"
-            id="bookSerial"
-            placeholder="Serial Number"
-        >
-
-        <input
-            type="text"
-            id="bookName"
-            placeholder="Book Name"
-        >
-
-        <input
-            type="text"
-            id="bookAuthor"
-            placeholder="Author Name"
-        >
-
-        <button onclick="addBook()">
-            Add Book
-        </button>
-
-    </div>
+    <button onclick="addBook()">
+        Add Book
+    </button>
 
     <table>
 
         <thead>
 
             <tr>
-                <th>Serial Number</th>
-                <th>Book Name</th>
-                <th>Author Name</th>
+                <th>Serial</th>
+                <th>Book</th>
+                <th>Author</th>
             </tr>
 
         </thead>
@@ -316,6 +124,129 @@
         </tbody>
 
     </table>
+
+</div>
+
+<!-- BRANCHES -->
+
+<div id="branchesSection" class="hidden section">
+
+    <h2>Select Branch</h2>
+
+    <button onclick="loadStudents('CSE')">
+        CSE
+    </button>
+
+    <button onclick="loadStudents('ECE')">
+        ECE
+    </button>
+
+    <button onclick="loadStudents('EEE')">
+        EEE
+    </button>
+
+    <button onclick="loadStudents('MECH')">
+        MECH
+    </button>
+
+    <button onclick="loadStudents('CIVIL')">
+        CIVIL
+    </button>
+
+</div>
+
+<!-- STUDENTS -->
+
+<div id="studentsSection" class="hidden section">
+
+    <h2>Students</h2>
+
+    <input
+        id="searchBox"
+        placeholder="Search Roll Number"
+        onkeyup="searchStudent()">
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Roll</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="studentsTable">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<!-- PROFILE -->
+
+<div id="profileSection" class="hidden section">
+
+    <h2>Student Profile</h2>
+
+    <img
+        id="profilePhoto"
+        width="120">
+
+    <h3 id="profileName"></h3>
+
+    <p id="profileRoll"></p>
+
+    <p id="profileBranch"></p>
+
+    <h3>Issued Books</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>S.No</th>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Issue</th>
+                <th>Due</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="issuedTable">
+
+        </tbody>
+
+    </table>
+
+    <button onclick="showIssueBook()">
+        Issue Book
+    </button>
+
+    <div id="issueArea" class="hidden">
+
+        <select id="bookSelect">
+
+        </select>
+
+        <input
+            id="issueDate"
+            type="date">
+
+        <input
+            id="dueDate"
+            type="date">
+
+        <button onclick="issueBook()">
+            Save
+        </button>
+
+    </div>
 
 </div>
 
